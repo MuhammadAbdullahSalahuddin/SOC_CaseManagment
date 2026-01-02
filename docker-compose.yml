@@ -30,7 +30,7 @@ services:
       - "3306:3306"
 
   backend:
-    build: .
+    image: muhammadabdullah12/soc_casemanagment-backend
     container_name: soc_backend
     restart: unless-stopped
     depends_on:
