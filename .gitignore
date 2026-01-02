@@ -2,6 +2,7 @@
 __pycache__/
 *.pyc
 venv/
+.venv/
 
 # Logs
 eve.json
@@ -10,3 +11,6 @@ evehash.txt
 
 # Secrets
 .env
+
+# Local testing virtualenv
+backendpy/DB_testing/

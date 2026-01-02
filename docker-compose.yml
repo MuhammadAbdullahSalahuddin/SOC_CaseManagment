@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   mongo:
-    image: mongo:7
+    image: mongodb/mongodb-community-server:latest
     container_name: soc_mongo
     restart: unless-stopped
     environment:
@@ -15,7 +15,7 @@ services:
       - "27017:27017"
 
   mysql:
-    image: mysql:8.0
+    image: mysql:latest
     container_name: soc_mysql
     restart: unless-stopped
     environment:
@@ -48,6 +48,7 @@ services:
       - /var/log/suricata:/var/log/suricata:ro
     stdin_open: true
     tty: true
+
 
 volumes:
   mongo_data:
