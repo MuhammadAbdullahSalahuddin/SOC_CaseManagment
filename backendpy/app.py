@@ -14,11 +14,12 @@ from PyQt6.QtGui import QFont, QIcon
 
 # --- CONFIGURATION ---
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "thebe", 
-    "database": "suricata_db"
+    "host": os.environ.get("MYSQL_HOST", "mysql"),
+    "user": os.environ.get("MYSQL_USER", "soc_user"),
+    "password": os.environ.get("MYSQL_PASSWORD", "thebe"),
+    "database": os.environ.get("MYSQL_DATABASE", "suricata_cases")
 }
+
 
 # --- AUTO-INGESTION CONFIG ---
 LOG_FILE_PATH = "/var/log/suricata/eve.json"
@@ -101,11 +102,18 @@ QTabBar::tab:selected {
 class DbManager:
     def __init__(self):
         try:
-            # Using Authentication for MongoDB
-            self.mongo_client = MongoClient("mongodb://admin:thebe@localhost:27017/?authSource=admin")
-            self.mongo_db = self.mongo_client["suricata_db"]
+            mongo_host = os.environ.get("MONGO_HOST", "localhost")
+            mongo_port = int(os.environ.get("MONGO_PORT", 27017))
+            mongo_user = os.environ.get("MONGO_INITDB_ROOT_USERNAME", "admin")
+            mongo_pass = os.environ.get("MONGO_INITDB_ROOT_PASSWORD", "thebe")
+            mongo_db_name = os.environ.get("MONGO_DATABASE", "suricata_db")
+
+            self.mongo_client = MongoClient(
+                f"mongodb://{mongo_user}:{mongo_pass}@{mongo_host}:{mongo_port}/?authSource=admin"
+            )
+            self.mongo_db = self.mongo_client[mongo_db_name]
             self.mongo_col = self.mongo_db["raw_logs"]
-        except Exception as e:
+        except Exception as e: 
             print(f"MongoDB Error: {e}")
 
     def get_sql_connection(self):
